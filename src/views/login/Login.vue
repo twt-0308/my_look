@@ -45,6 +45,11 @@ export default {
         const res = await this.$http.post('/login', this.model)
         console.log(res)
         if (res.data.code === 302) return this.$msg.fail(res.data.msg)
+        localStorage.setItem('id', res.data.id)
+        localStorage.setItem('token', res.data.token)
+        setTimeout(() => {
+          this.$router.push('/user')
+        }, 1000)
         return this.$msg.success(res.data.msg)
       } else {
         this.$msg.fail('格式不正确!')
