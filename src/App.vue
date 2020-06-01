@@ -11,4 +11,7 @@
     background-color: #f4f4f4;
     box-sizing: border-box;
   }
+  p {
+    margin: 0;
+  }
 </style>

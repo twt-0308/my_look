@@ -48,7 +48,7 @@ export default {
         localStorage.setItem('id', res.data.id)
         localStorage.setItem('token', res.data.token)
         setTimeout(() => {
-          this.$router.push('/user')
+          this.$router.push('/home')
         }, 1000)
         return this.$msg.success(res.data.msg)
       } else {

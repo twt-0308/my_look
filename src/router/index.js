@@ -23,11 +23,17 @@ const routes = [
   },
   {
     path: '/user',
-    component: User
+    component: User,
+    meta: {
+      isToken: true
+    }
   },
   {
     path: '/edit',
-    component: Edit
+    component: Edit,
+    meta: {
+      isToken: true
+    }
   }
 ]
 
@@ -41,7 +47,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/' || to.path === '/login') return next()
   // 获取token
   const token = localStorage.getItem('token')
-  if (!token) return next('/login')
+  if (!token && to.meta.isToken) return next('/login')
   next()
 })
 export default router

@@ -1,6 +1,6 @@
 <template>
   <div class="nav_bar">
-    <div class="logo">
+    <div class="logo" @click="$router.push('/home')">
       <img src="@/assets/logo.png">
     </div>
     <div class="center">
@@ -9,14 +9,30 @@
       <p></p>
     </div>
     <div class="right">
-      <img src="@/assets/default_img.jpg">
+      <img :src="img" v-if="img" @click="$router.push('/edit')">
+      <img src="@/assets/default_img.jpg" v-else>
       <div>下载App</div>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      img: ''
+    }
+  },
+  mounted() {
+    this.getUserData()
+  },
+  methods: {
+    async getUserData() {
+      const res = await this.$http.get('/user/' + localStorage.getItem('id'))
+      this.img = res.data[0].user_img
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -42,6 +58,7 @@ export default {}
     img {
       width: 6.67vw;
       height: 6.67vw;
+      border-radius: 50%;
     }
     div {
       padding: 1vw 2.78vw;
