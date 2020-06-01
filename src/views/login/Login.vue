@@ -43,7 +43,6 @@ export default {
       const rulg = /^\d{7,11}$/
       if (rulg.test(this.model.username) && rulg.test(this.model.password)) {
         const res = await this.$http.post('/login', this.model)
-        console.log(res)
         if (res.data.code === 302) return this.$msg.fail(res.data.msg)
         localStorage.setItem('id', res.data.id)
         localStorage.setItem('token', res.data.token)

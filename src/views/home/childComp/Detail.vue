@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="detail">
+    <div class="detail" @click="detailClick">
       <div class="img_parent">
         <img :src="detailitem.img" alt="">
         <div class="bottom">
@@ -15,7 +15,14 @@
 
 <script>
 export default {
-  props: ['detailitem']
+  props: ['detailitem'],
+  methods: {
+    detailClick() {
+      if (this.$route.path !== '/article/' + this.detailitem.id) {
+        this.$router.push('/article/' + this.detailitem.id)
+      }
+    }
+  }
 }
 </script>
 

@@ -5,10 +5,20 @@ const Login = () => import('@/views/login/Login.vue')
 const Index = () => import('@/views/home/index.vue')
 const User = () => import('@/views/user/User.vue')
 const Edit = () => import('@/views/user/childCom/Edit.vue')
+const Article = () => import('@/views/detail/Article.vue')
+const Map = () => import('@/views/index.vue')
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/map',
+    component: Map
+  },
+  {
+    path: '/article/:id',
+    component: Article
+  },
   {
     path: '/',
     component: Register
@@ -19,7 +29,10 @@ const routes = [
   },
   {
     path: '/home',
-    component: Index
+    component: Index,
+    meta: {
+      keepalive: true
+    }
   },
   {
     path: '/user',
