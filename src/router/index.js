@@ -20,7 +20,7 @@ const routes = [
     component: Article
   },
   {
-    path: '/',
+    path: '/register',
     component: Register
   },
   {
@@ -28,7 +28,7 @@ const routes = [
     component: Login
   },
   {
-    path: '/home',
+    path: '/',
     component: Index,
     meta: {
       keepalive: true

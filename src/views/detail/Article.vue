@@ -1,5 +1,5 @@
 <template>
-  <div v-if="articleData">
+  <div v-if="articleData" class="article">
     <navbar/>
     <div class="detailInfo">
       <div class="video">
@@ -35,12 +35,18 @@
         <detail class="detail" :detailitem="selectItem" v-for="(selectItem,selectIndex) in commend" :key="selectIndex"/>
       </div>
     </div>
+    <!--  发表  -->
+    <comment/>
+    <!--  评论  -->
+    <order-comment/>
   </div>
 </template>
 
 <script>
 import Navbar from '@/components/common/Navbar.vue'
 import Detail from '@/views/home/childComp/Detail'
+import Comment from './childComp/Comment'
+import OrderComment from './childComp/OrderComment'
 export default {
   data() {
     return {
@@ -50,17 +56,21 @@ export default {
   },
   components: {
     Navbar,
-    Detail
+    Detail,
+    Comment,
+    OrderComment
   },
   created() {
     this.getArticleData()
     this.CommendData()
   },
   methods: {
+    // 获取点击视屏
     async getArticleData() {
       const { data: res } = await this.$http.get('/article/' + this.$route.params.id)
       this.articleData = res[0]
     },
+    // 获取推荐视屏
     async CommendData() {
       const res = await this.$http.get('/commend')
       this.commend = res.data
@@ -76,6 +86,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+  .article {
+    background-color: white;
+  }
   .video {
     width: 100%;
     video {

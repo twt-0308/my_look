@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <login-top middleTop="登录账号">
-      <div style="font-size: 3.61vw" slot="right" @click="$router.push('/')">切换注册页面</div>
+      <div style="font-size: 3.61vw" slot="right" @click="$router.push('/register')">切换注册页面</div>
     </login-top>
     <login-text label="账号"
                 rule="^.{6,16}$"
@@ -47,7 +47,7 @@ export default {
         localStorage.setItem('id', res.data.id)
         localStorage.setItem('token', res.data.token)
         setTimeout(() => {
-          this.$router.push('/home')
+          this.$router.push('/user')
         }, 1000)
         return this.$msg.success(res.data.msg)
       } else {
