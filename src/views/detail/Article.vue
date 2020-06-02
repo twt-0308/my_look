@@ -36,9 +36,9 @@
       </div>
     </div>
     <!--  发表  -->
-    <comment/>
+    <comment :leng="lens" @sendComment="sendComment"/>
     <!--  评论  -->
-    <order-comment/>
+    <order-comment @lengthselect="res => lens = res"/>
   </div>
 </template>
 
@@ -51,7 +51,14 @@ export default {
   data() {
     return {
       articleData: null,
-      commend: []
+      commend: [],
+      lens: null,
+      postCom: {
+        comment_content: '',
+        comment_date: '',
+        article_id: null,
+        comment_id: null
+      }
     }
   },
   components: {
@@ -74,6 +81,18 @@ export default {
     async CommendData() {
       const res = await this.$http.get('/commend')
       this.commend = res.data
+    },
+    // 发送评论
+    async sendComment(str) {
+      const date = new Date()
+      const m = date.getMonth() + 1
+      const d = date.getDate()
+      const day = `${m.toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`
+      this.postCom.comment_date = day
+      this.postCom.comment_content = str
+      this.postCom.article_id = this.$route.params.id
+      const result = await this.$http.post('/comment_post/' + localStorage.getItem('id'), this.postCom)
+      if (result.status === 200) return this.$msg.success('发表成功')
     }
   },
   watch: {

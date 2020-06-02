@@ -10,7 +10,7 @@
           <p>
             <span v-if="item.userinfo">{{item.userinfo.name}}</span>
             <span v-else>此用户无姓名</span>
-            <span>04-27</span>
+            <span>{{item.comment_date}}</span>
           </p>
           <div>
             {{item.comment_content}}
@@ -39,6 +39,7 @@ export default {
   methods: {
     async getCommentData() {
       const { data: res } = await this.$http.get('/comment/' + this.$route.params.id)
+      this.$emit('lengthselect', res.length)
       this.commentList = this.changeCommentData(res)
     },
     // 改造数据

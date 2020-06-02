@@ -1,5 +1,5 @@
 <template>
-  <div class="comment_item">
+  <div class="comment_item" style="margin-left: 30px">
     <div class="commentItem" v-for="(item, index) in commentChild" :key="index">
       <div class="userImg">
         <img :src="item.userinfo.user_img" alt="" v-if="item.userinfo.user_img">
@@ -9,6 +9,7 @@
         <p>
           <span v-if="item.userinfo">{{item.userinfo.name}}</span>
           <span v-else>此用户无姓名</span>
+          <span>{{item.comment_date}}</span>
         </p>
         <div>
           {{item.comment_content}}
@@ -26,7 +27,6 @@ export default {
 
 <style scoped lang="less">
   .comment_item {
-    padding: 0 8.33vw;
   }
   .commentItem {
     display: flex;
