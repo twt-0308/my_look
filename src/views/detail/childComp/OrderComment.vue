@@ -12,8 +12,9 @@
             <span v-else>此用户无姓名</span>
             <span>{{item.comment_date}}</span>
           </p>
-          <div>
+          <div class="return">
             {{item.comment_content}}
+            <span @click="huifu(item.comment_id)">回复</span>
           </div>
         </div>
       </div>
@@ -55,6 +56,10 @@ export default {
         return arr1
       }
       return fn(null)
+    },
+    // 回复评论
+    huifu(id) {
+      this.$emit('huifuHandle', id)
     }
   }
 }
@@ -91,6 +96,16 @@ export default {
       div {
         font-size: 3.61vw;
       }
+    }
+  }
+  .return {
+    position: relative;
+    span {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      color: red;
+      cursor: pointer;
     }
   }
 </style>

@@ -29,6 +29,7 @@ export default {
 <style scoped lang="less">
   img {
     width: 100%;
+    height: 31.7vw;
   }
   p {
     font-size: 3.61vw;

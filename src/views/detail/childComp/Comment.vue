@@ -7,7 +7,7 @@
     <div class="commentMyinfo">
       <img :src="userInfo.user_img" alt="" v-if="userInfo">
       <img src="@/assets/default_img.jpg" alt="" v-else>
-      <input v-model="content" type="text" placeholder="说点什么吧">
+      <input v-model="content" type="text" placeholder="说点什么吧" ref="commentInput">
       <button @click="handleClick">发表</button>
     </div>
   </div>
@@ -39,6 +39,11 @@ export default {
         return this.$msg.fail('请先登录')
       }
       this.$emit('sendComment', this.content)
+      this.content = ''
+    },
+    // 自动焦点
+    focus() {
+      this.$refs.commentInput.focus()
     }
   }
 }

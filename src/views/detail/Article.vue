@@ -17,13 +17,13 @@
           <span>{{articleData.date}}</span>
         </div>
         <div class="bottom">
-          <div>
+          <div @click="collectionClick" :class="{ active: flag }">
             <span class="icon-star-full"></span>
             <span>收藏</span>
           </div>
-          <div>
-            <span class="icon-box-add"></span>
-            <span>缓存</span>
+          <div @click="subscriptClick" :class="{ active: guanzhu }">
+            <span class="icon-bubble"></span>
+            <span>关注</span>
           </div>
           <div>
             <span class="icon-redo2"></span>
@@ -36,9 +36,9 @@
       </div>
     </div>
     <!--  发表  -->
-    <comment :leng="lens" @sendComment="sendComment"/>
+    <comment :leng="lens" @sendComment="sendComment" ref="commentRef"/>
     <!--  评论  -->
-    <order-comment @lengthselect="res => lens = res"/>
+    <order-comment ref="orderRef" @lengthselect="res => lens = res" @huifuHandle="huifuHandle"/>
   </div>
 </template>
 
@@ -57,8 +57,11 @@ export default {
         comment_content: '',
         comment_date: '',
         article_id: null,
-        comment_id: null
-      }
+        comment_id: null,
+        parent_id: null
+      },
+      flag: false,
+      guanzhu: false
     }
   },
   components: {
@@ -70,12 +73,16 @@ export default {
   created() {
     this.getArticleData()
     this.CommendData()
+    this.collectionInit()
   },
   methods: {
     // 获取点击视屏
     async getArticleData() {
       const { data: res } = await this.$http.get('/article/' + this.$route.params.id)
       this.articleData = res[0]
+      if (this.articleData) {
+        this.subscriptInit()
+      }
     },
     // 获取推荐视屏
     async CommendData() {
@@ -92,7 +99,58 @@ export default {
       this.postCom.comment_content = str
       this.postCom.article_id = this.$route.params.id
       const result = await this.$http.post('/comment_post/' + localStorage.getItem('id'), this.postCom)
-      if (result.status === 200) return this.$msg.success('发表成功')
+      if (result.status !== 200) return this.$msg.fail('发表失败')
+      this.$msg.success('发表成功')
+      this.$refs.orderRef.getCommentData()
+      this.postCom.parent_id = null
+    },
+    huifuHandle(id) {
+      this.$refs.commentRef.focus()
+      this.postCom.parent_id = id
+    },
+    // 收藏文章
+    async collectionClick() {
+      if (!localStorage.getItem('id') && !localStorage.getItem('token')) return this.$msg.fail('请先登录')
+      const res = await this.$http.post('/collection/' + localStorage.getItem('id'), { article_id: this.$route.params.id })
+      if (res.data.code === 200 && res.data.msg === '收藏成功') {
+        this.flag = true
+      } else {
+        this.flag = false
+      }
+      this.$msg.success(res.data.msg)
+    },
+    // 进入页面获取是否收藏
+    async collectionInit() {
+      if (localStorage.getItem('token')) {
+        const res = await this.$http.get('/collection/' + localStorage.getItem('id'), {
+          params: {
+            article_id: this.$route.params.id
+          }
+        })
+        this.flag = res.data.success
+      }
+    },
+    // 点击关注
+    async subscriptClick() {
+      if (!localStorage.getItem('id') && !localStorage.getItem('token')) return this.$msg.fail('请先登录')
+      const res = await this.$http.post('/sub_scription/' + localStorage.getItem('id'), { sub_id: this.articleData.userid })
+      if (res.data.msg === '关注成功') {
+        this.guanzhu = true
+      } else {
+        this.guanzhu = false
+      }
+      this.$msg.fail(res.data.msg)
+    },
+    // 进入页面获取是否关注
+    async subscriptInit() {
+      if (localStorage.getItem('token')) {
+        const res = await this.$http.get('/sub_scription/' + localStorage.getItem('id'), {
+          params: {
+            sub_id: this.articleData.userid
+          }
+        })
+        this.guanzhu = res.data.success
+      }
     }
   },
   watch: {
@@ -164,5 +222,8 @@ export default {
       width: 48%;
       margin: 1.39vw 0;
     }
+  }
+  .active {
+    color: pink;
   }
 </style>

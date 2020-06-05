@@ -7,6 +7,7 @@ const User = () => import('@/views/user/User.vue')
 const Edit = () => import('@/views/user/childCom/Edit.vue')
 const Article = () => import('@/views/detail/Article.vue')
 const Map = () => import('@/views/index.vue')
+const EditCategory = () => import('@/views/home/childComp/EditCategory.vue')
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,10 @@ const routes = [
     meta: {
       isToken: true
     }
+  },
+  {
+    path: '/editCategory',
+    component: EditCategory
   }
 ]
 

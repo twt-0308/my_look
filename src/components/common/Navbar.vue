@@ -23,7 +23,7 @@ export default {
       img: ''
     }
   },
-  mounted() {
+  created() {
     if (localStorage.getItem('token')) {
       this.getUserData()
     }

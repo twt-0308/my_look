@@ -1,9 +1,11 @@
 <template>
-  <div class="index">
+  <div class="index" v-if="selectArr">
     <navbar/>
     <div class="hr"></div>
-    <van-tabs swipeable sticky v-model="active">
-      <van-tab v-for="(item,index) in selectArr" :key="index" :title="item.title">
+    <div class="categorytab">
+      <div class="category-ico" @click="$router.push('/editCategory')"><van-icon name="setting-o" /></div>
+      <van-tabs swipeable sticky v-model="active" class="hello">
+        <van-tab v-for="(item,index) in selectArr" :key="index" :title="item.title">
         <van-list
           v-model="item.loading"
           :finished="item.finished"
@@ -16,7 +18,8 @@
           </div>
         </van-list>
       </van-tab>
-    </van-tabs>
+      </van-tabs>
+    </div>
   </div>
 </template>
 
@@ -38,9 +41,17 @@ export default {
   created() {
     this.selectCategory()
   },
+  activated() {
+    if (localStorage.getItem('newCat')) {
+      const newCat = JSON.parse(localStorage.getItem('newCat'))
+      this.changeSelectArr(newCat)
+      this.selectArticle()
+    }
+  },
   methods: {
     // 请求导航栏数据
     async selectCategory() {
+      if (localStorage.getItem('newCat')) return
       const { data: res } = await this.$http.get('/category')
       this.changeSelectArr(res)
       this.selectArticle()
@@ -112,5 +123,19 @@ export default {
   .detail_item:after {
     content: '';
     width: 48%;
+  }
+  .categorytab{
+    position: relative;
+    .category-ico{
+      position: absolute;
+      z-index: 5;
+      right: 0;
+      top: 1.944vw;
+      padding: 1.389vw 2.778vw;
+      background-color: white;
+    }
+  }
+  /deep/ .van-tab:nth-child(12) {
+    padding-right: 5.56vw;
   }
 </style>
